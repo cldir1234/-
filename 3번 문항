@@ -1,0 +1,31 @@
+아두이노 코드 
+
+void setup(){
+  pinMode(13, OUTPUT);
+}
+void loop(){
+  digitalWrite(13, HIGH);
+  delay(500);
+  digitalWrite(13, LOW);
+  delay(500);
+}
+
+
+프로세싱 코드 
+
+void setup() {
+  size(400, 400);
+  background(0); // 초기 배경색을 검은색으로 설정
+}
+
+void draw() {
+  // 아무것도 하지 않아도 됨
+}
+
+void keyPressed() {
+  if (key == '1') {
+    background(0, 255, 0); // 1을 누르면 초록색 배경으로 변경
+  } else if (key == '2') {
+    background(0); // 2를 누르면 검은색 배경으로 변경
+  }
+}
