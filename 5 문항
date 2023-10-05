@@ -1,0 +1,63 @@
+프로세싱 코드
+
+import processing.net.*;
+
+Client client;
+
+void setup() {
+  size(200, 100);
+  client = new Client(this, "your-arduino-ip", 80); // 아두이노의 IP 주소 및 포트에 맞게 변경
+  background(200);
+}
+
+void draw() {
+  // 화면 표시
+}
+
+void keyPressed() {
+  if (key == '1' || key == '2') {
+    client.write(key); // '1' 또는 '2'를 서버로 전송 (LED 제어)
+  }
+}
+
+void mousePressed() {
+  String inputText = "3"; // 스마트폰의 텍스트 박스에 입력한 숫자 (3으로 설정, 필요에 따라 변경)
+  client.write(inputText); // 입력한 숫자를 서버로 전송 (피에조 스피커 제어)
+}
+
+
+아두이노 코드
+
+#define LED_PIN 7
+#define SPEAKER_PIN 4
+
+int ledState = LOW;
+int speakerTone = 0;
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(SPEAKER_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char command = Serial.read();
+
+    // LED 제어
+    if (command == 'on') {
+      ledState = HIGH;
+    } else if (command == 'off') {
+      ledState = LOW;
+    }
+    digitalWrite(LED_PIN, ledState);
+
+    // 피에조 스피커 제어
+    if (command >= '1' && command <= '8') {
+      int note = map(command - '0', 1, 8, 262, 523); // 미디 음계 값 계산 (도부터 시까지)
+      tone(SPEAKER_PIN, note);
+      delay(500);
+      noTone(SPEAKER_PIN);
+    }
+  }
+}
